@@ -1,5 +1,27 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "AV Simulation Fundamentals", type: "learning", roles: ["nvidia-av-planning", "nvidia-av-testing"], status: "not-started", desc: "Closed-loop sim, AlpaSim, DRIVE Sim, sensor simulation", priority: "medium", hours: 10 },
+  { title: "AV Motion Planning Study", type: "learning", roles: ["nvidia-av-planning"], status: "not-started", desc: "Frenet frames, trajectory optimization, behavior planning, Alpamayo architecture", priority: "medium", hours: 6 },
+  { title: "AV Safety Standards Overview", type: "learning", roles: ["nvidia-av-planning", "nvidia-av-testing"], status: "not-started", desc: "ISO 26262, SOTIF, RSS framework, NCAP 2026 requirements", priority: "medium", hours: 4 },
+];
+
+export const meta = {
+  id: "nvidia-av-planning",
+  company: "NVIDIA",
+  title: "Sr. Dir, AV Planning & Controls",
+  comp: "$240K–$379.5K",
+  fit: "55%",
+  priority: 5,
+  status: "research",
+  loc: "Santa Clara, CA",
+  tags: ["PM/PgM","AV","Planning & Controls","Leadership"],
+  color: "#f59e0b",
+  strengths: ["EM → PM leadership skills","Spatial computing adjacency","AI-native thinking","Cross-team coordination","Builder mentality"],
+  gaps: [{g:"No AV/robotics domain experience",s:"HIGH"},{g:"Planning & controls terminology",s:"HIGH"},{g:"NVIDIA DRIVE stack knowledge",s:"HIGH"},{g:"12+ yrs PM/PgM framing",s:"MEDIUM"}],
+  verdict: "Compelling domain but significant stretch. Medium priority.",
+};
+
 const sections = [
   {
     id: "context",

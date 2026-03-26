@@ -1,5 +1,27 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "Python Test Harness", type: "project", roles: ["nvidia-av-testing"], status: "not-started", desc: "Build parameterized driving scenario test suite with pytest + CI pipeline", priority: "medium" },
+  { title: "CARLA Simulator Hands-on", type: "project", roles: ["nvidia-av-testing"], status: "not-started", desc: "Run CARLA scenarios, automate scenario creation and result collection", priority: "medium" },
+  { title: "Test Architecture Design Doc", type: "project", roles: ["nvidia-av-testing"], status: "not-started", desc: "Design complete AV test infra: scenario library, orchestrator, result analyzer", priority: "medium" },
+];
+
+export const meta = {
+  id: "nvidia-av-testing",
+  company: "NVIDIA",
+  title: "Sr. EM, L3/L4 AV Testing",
+  comp: "$272K–$431.25K",
+  fit: "25%",
+  priority: 7,
+  status: "watching",
+  loc: "Santa Clara +1",
+  tags: ["EM","AV Testing","Simulation","Infrastructure"],
+  color: "#ef4444",
+  strengths: ["Strong EM skills","Complex systems experience","AI-native thinking","Cross-team collaboration"],
+  gaps: [{g:"No ADAS/AV/Simulation experience",s:"HIGH"},{g:"Python/C++ depth",s:"HIGH"},{g:"10+ yrs test infrastructure",s:"HIGH"},{g:"AV simulation frameworks",s:"MEDIUM"}],
+  verdict: "Large stretch. 60-day+ prep needed. Lowest priority.",
+};
+
 const S = [
   { id:"opp", title:"The Opportunity", icon:"◆", type:"opp", data:{
     role:"Senior Engineering Manager, L3 and L4 Testing — Autonomous Vehicles", comp:"$272K–$431.25K base + equity", team:"NVIDIA Autonomous Vehicles — Testing & Simulation", loc:"Santa Clara, CA (+1 more)",

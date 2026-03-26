@@ -1,5 +1,34 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "3 Consumer Product Briefs", type: "project", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm"], status: "not-started", desc: "Product concepts for claude.ai with user problem, solution, validation plan", priority: "high" },
+  { title: "Consumer Product MVP", type: "project", roles: ["anthropic-consumer-pm", "anthropic-ui-engineer"], status: "not-started", desc: "Prototype your best product concept with Claude Code", priority: "high" },
+  { title: "Competitive Analysis Doc", type: "project", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm"], status: "not-started", desc: "ChatGPT vs Gemini vs Copilot vs Claude feature comparison", priority: "medium" },
+  { title: "Consumer Growth Strategy", type: "project", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm"], status: "not-started", desc: "Strategy to 5x Claude consumer market share in 12 months", priority: "medium" },
+  { title: "Anthropic Product Philosophy", type: "learning", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm", "anthropic-people-products"], status: "not-started", desc: "Cat Wu's posts, side quests, Labs announcement, product culture", priority: "high", hours: 4 },
+  { title: "Consumer AI Competitive Landscape", type: "learning", roles: ["anthropic-consumer-pm"], status: "not-started", desc: "Use ChatGPT, Gemini, Copilot, Perplexity for a full day each", priority: "high", hours: 6 },
+  { title: "Success Metrics Frameworks", type: "learning", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm"], status: "not-started", desc: "HEART, AARRR, North Star metric — practice on Claude features", priority: "medium", hours: 4 },
+  { title: "Anthropic Research (PM Level)", type: "learning", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm"], status: "not-started", desc: "Constitutional AI, scaling laws, extended thinking — what they mean for products", priority: "medium", hours: 4 },
+  { title: "Anthropic Interview Process", type: "learning", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm", "anthropic-people-products", "anthropic-ui-engineer"], status: "not-started", desc: "Interview format, culture fit, mission alignment, coding rounds", priority: "high", hours: 4 },
+  { title: "Mock Interview Practice", type: "learning", roles: ["anthropic-consumer-pm", "anthropic-claude-code-pm", "anthropic-people-products"], status: "not-started", desc: "Product sense, metrics, strategy, behavioral — 3 full mock loops", priority: "high", hours: 8 },
+];
+
+export const meta = {
+  id: "anthropic-consumer-pm",
+  company: "Anthropic",
+  title: "Product Manager, Consumer",
+  comp: "$385K–$460K",
+  fit: "95%",
+  priority: 1,
+  status: "prep",
+  loc: "SF / NYC",
+  tags: ["PM","Consumer","Founder-fit","0-to-1"],
+  color: "#10b981",
+  strengths: ["Former consumer founder","Prototypes with Claude daily","0-to-1 DNA","Deep technical background","Obsessed with craft","IS the target user"],
+  gaps: [{g:"No formal PM title",s:"MEDIUM"},{g:"Consumer distribution at scale",s:"MEDIUM"},{g:"Research-to-product translation",s:"LOW"},{g:"SF/NYC location",s:"VARIES"}],
+  verdict: "They want a founder. You are one. Top priority.",
+};
+
 const S = [
   { id:"opp", title:"The Opportunity", icon:"◆", type:"opp", data:{
     role:"Product Manager, Consumer", comp:"$385K–$460K + equity", team:"Consumer Team (under Ami Vora, Head of Product; previously Mike Krieger CPO)", loc:"San Francisco, CA | New York City, NY",

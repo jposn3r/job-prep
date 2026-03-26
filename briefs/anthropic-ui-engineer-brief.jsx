@@ -1,5 +1,27 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "Streaming Chat Clone", type: "project", roles: ["anthropic-ui-engineer", "anthropic-claude-code-pm", "anthropic-consumer-pm"], status: "not-started", desc: "Next.js + Anthropic SDK streaming chat interface", priority: "high" },
+  { title: "Artifact Renderer or Skills UI", type: "project", roles: ["anthropic-ui-engineer"], status: "not-started", desc: "Build an artifact sandbox renderer or Skills management UI", priority: "high" },
+  { title: "Accessibility Audit & Fix", type: "project", roles: ["anthropic-ui-engineer"], status: "not-started", desc: "Full a11y audit with axe DevTools, ARIA live regions, keyboard nav", priority: "medium" },
+];
+
+export const meta = {
+  id: "anthropic-ui-engineer",
+  company: "Anthropic",
+  title: "UI Software Engineer",
+  comp: "$320K–$405K",
+  fit: "70%",
+  priority: 6,
+  status: "research",
+  loc: "SF / NYC / Seattle",
+  tags: ["IC","Frontend","React/Next.js","Consumer"],
+  color: "#8b5cf6",
+  strengths: ["Product instincts","AI-native thinking","IS the target user","Shipping discipline"],
+  gaps: [{g:"5+ yrs hands-on frontend (recent)",s:"HIGH"},{g:"Recent IC shipping velocity",s:"MEDIUM"},{g:"Performance optimization depth",s:"MEDIUM"},{g:"Accessibility expertise",s:"MEDIUM"}],
+  verdict: "Strong if you want EM→IC. Need to prove recent hands-on coding.",
+};
+
 const sections = [
   {
     id: "opportunity", title: "The Opportunity", icon: "◆",

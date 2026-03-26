@@ -1,5 +1,29 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "AI Hiring Assistant Prototype", type: "project", roles: ["anthropic-people-products", "anthropic-consumer-pm"], status: "not-started", desc: "Job desc → interview questions + scorecard using Claude API", priority: "high" },
+  { title: "90-Day Plan (People Products)", type: "project", roles: ["anthropic-people-products"], status: "not-started", desc: "What you'd do in your first 90 days as EM", priority: "medium" },
+  { title: "MCP Server for HR", type: "project", roles: ["anthropic-people-products"], status: "not-started", desc: "MCP that reads team structure, generates 1:1 prep notes", priority: "medium" },
+  { title: "People Process Redesign", type: "project", roles: ["anthropic-people-products"], status: "not-started", desc: "Redesign 3 processes (hiring, perf review, onboarding) as AI-native workflows", priority: "medium" },
+  { title: "Greenhouse API & HR Tech", type: "learning", roles: ["anthropic-people-products"], status: "not-started", desc: "Harvest API, candidate data models, onboarding workflows", priority: "medium", hours: 4 },
+];
+
+export const meta = {
+  id: "anthropic-people-products",
+  company: "Anthropic",
+  title: "EM, People Products",
+  comp: "$320K–$405K",
+  fit: "92%",
+  priority: 3,
+  status: "prep",
+  loc: "Remote + Travel",
+  tags: ["EM","People Tools","AI-native","Internal"],
+  color: "#10b981",
+  strengths: ["Direct EM experience match","Ships LLM-native features","Self-sufficient builder","IS the customer","Cross-functional thinker","Remote-friendly"],
+  gaps: [{g:"HR tech platforms (Greenhouse/Workday)",s:"LOW"},{g:"MCP production experience",s:"MEDIUM"},{g:"Eval design for LLM outputs",s:"MEDIUM"},{g:"Startup speed narrative",s:"MEDIUM"}],
+  verdict: "Near-perfect EM fit. Your current job + AI twist. Remote.",
+};
+
 const S = [
   { id:"opp", title:"The Opportunity", icon:"◆", type:"opp", data:{
     role:"Engineering Manager, People Products", comp:"$320K–$405K + equity", team:"People Products (internal tools for hiring, onboarding, teamwork, promotions)", loc:"Remote-Friendly (Travel Required) | San Francisco, CA",

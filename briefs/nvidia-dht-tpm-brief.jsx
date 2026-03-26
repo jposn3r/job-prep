@@ -1,5 +1,28 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "TPM Release Readiness Template", type: "project", roles: ["nvidia-dht-tpm"], status: "not-started", desc: "Design release checklist: QA, security, legal, docs, model card, Hugging Face publish", priority: "medium" },
+  { title: "Digital Human Tech Landscape Doc", type: "project", roles: ["nvidia-dht-tpm"], status: "not-started", desc: "One-pager covering ACE stack, partners, competitive positioning", priority: "medium" },
+  { title: "NVIDIA ACE & Digital Humans", type: "learning", roles: ["nvidia-dht-tpm"], status: "not-started", desc: "Audio2Face, Riva, ACE architecture, partner ecosystem", priority: "medium", hours: 6 },
+  { title: "XR → Digital Humans Narrative", type: "learning", roles: ["nvidia-dht-tpm"], status: "not-started", desc: "Map Meta Reality Labs experience to digital human concepts, prepare STAR stories", priority: "medium", hours: 4 },
+];
+
+export const meta = {
+  id: "nvidia-dht-tpm",
+  company: "NVIDIA",
+  title: "TPM, Digital Human Tech",
+  comp: "$200K–$322K",
+  fit: "78%",
+  priority: 4,
+  status: "research",
+  loc: "Remote (CA) +4",
+  tags: ["TPM","Digital Humans","3D/Animation","GenAI"],
+  color: "#3b82f6",
+  strengths: ["XR→Digital Humans connection","Cross-team coordination DNA","8+ yrs program mgmt","GenAI practitioner","Communication skills","Remote"],
+  gaps: [{g:"No TPM title on resume",s:"LOW"},{g:"Open-source model release exp",s:"MEDIUM"},{g:"3D/animation domain depth",s:"MEDIUM"},{g:"Jira proficiency",s:"LOW"}],
+  verdict: "Sleeper pick. XR background connects. Remote-friendly.",
+};
+
 const S = [
   { id:"opp", title:"The Opportunity", icon:"◆", type:"opp", data:{
     role:"Technical Program Manager — Digital Human Technology", comp:"L4: $168K–$258.75K | L5: $200K–$322K + equity", team:"NVIDIA Digital Human Technology (DHT)", loc:"Remote (CA) + 4 more locations",

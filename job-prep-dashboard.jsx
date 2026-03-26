@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 // ═══════════════════════════════════════════════════════════════
@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 
 const STATUS_COLORS = {"not-started":"#4b5563","in-progress":"#f59e0b","complete":"#10b981","applied":"#3b82f6","interviewing":"#8b5cf6","watching":"#6b7280"};
 const STATUS_LABELS = {"not-started":"Not Started","in-progress":"In Progress","complete":"Complete","applied":"Applied","interviewing":"Interviewing","watching":"Watching","prep":"Prepping","research":"Researching"};
+
+const ROLE_STATUSES = ["prep","research","watching","applied","interviewing"];
+const TASK_STATUSES = ["not-started","in-progress","complete"];
 
 // ═══════════════════════════════════════════════════════════════
 // COMPONENTS
@@ -21,6 +24,48 @@ const Tab = ({active,label,onClick,count}) => (
 const Pill = ({color,children}) => (
   <span className="text-xs px-2 py-0.5 rounded-full font-mono border" style={{background:`${color}15`,color:color,borderColor:`${color}30`}}>{children}</span>
 );
+
+function StatusDropdown({ current, options, onChange }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const color = STATUS_COLORS[current] || "#4b5563";
+  const label = STATUS_LABELS[current] || current;
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [open]);
+
+  return (
+    <span ref={ref} style={{ position: "relative" }}>
+      <button
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(o => !o); }}
+        className="text-xs px-2 py-0.5 rounded-full font-mono border transition-colors hover:brightness-125"
+        style={{ background: `${color}25`, color: "#fff", borderColor: `${color}40` }}
+      >{label}</button>
+      {open && (
+        <div
+          style={{ position: "absolute", top: "100%", right: 0, marginTop: 4, zIndex: 60, background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.5)" }}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+        >
+          {options.map(s => (
+            <button
+              key={s}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onChange(s); setOpen(false); }}
+              className="w-full text-left px-3 py-1.5 text-xs font-mono flex items-center gap-2 hover:bg-white/10 transition-colors"
+              style={{ color: current === s ? (STATUS_COLORS[s] || "#9ca3af") : "#9ca3af", minWidth: 120 }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: 3, background: STATUS_COLORS[s] || "#6b7280" }} />
+              {STATUS_LABELS[s] || s}
+            </button>
+          ))}
+        </div>
+      )}
+    </span>
+  );
+}
 
 const ProgressBar = ({pct,color="#10b981"}) => (
   <div className="w-full h-1.5 rounded-full bg-white/5 overflow-hidden">
@@ -86,7 +131,7 @@ function crossRoleScore(task) {
 // VIEWS
 // ═══════════════════════════════════════════════════════════════
 
-const Overview = ({roles,tasks}) => {
+const Overview = ({roles,tasks,onUpdateTask,onUpdateRole}) => {
   const prepping = roles.filter(r=>r.status==="prep").length;
   const projects = tasks.filter(t=>t.type==="project");
   const learning = tasks.filter(t=>t.type==="learning");
@@ -114,19 +159,21 @@ const Overview = ({roles,tasks}) => {
       </div>
 
       <div>
-        <div className="text-xs tracking-widest text-amber-400 font-mono mb-3">PRIORITY STACK</div>
+        <div className="text-xs tracking-widest text-amber-400 font-mono mb-3">RANKED BY FIT</div>
         <div className="space-y-2">
-          {[...roles].sort((a,b)=>a.priority-b.priority).map(r=>(
-            <Link key={r.id} to={`/role/${r.id}`} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-3 hover:bg-white/[0.08] transition-colors cursor-pointer no-underline" style={{textDecoration:"none"}}>
-              <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
-              <div className="w-2 h-2 rounded-full" style={{background:r.color}}/>
-              <div className="flex-1 min-w-0">
-                <div className="text-white text-sm font-medium truncate">{r.company} · {r.title}</div>
-                <div className="text-gray-500 text-xs">{r.comp} · {r.loc}</div>
-              </div>
-              <Pill color={parseInt(r.fit)>=85?"#10b981":parseInt(r.fit)>=60?"#f59e0b":"#ef4444"}>{r.fit} fit</Pill>
-              <Pill color={STATUS_COLORS[r.status]||"#4b5563"}>{STATUS_LABELS[r.status]}</Pill>
-            </Link>
+          {[...roles].sort((a,b)=>parseInt(b.fit)-parseInt(a.fit)).map(r=>(
+            <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-3 hover:bg-white/[0.08] transition-colors">
+              <Link to={`/role/${r.id}`} className="flex items-center gap-3 flex-1 min-w-0 no-underline" style={{textDecoration:"none"}}>
+                <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
+                <div className="w-2 h-2 rounded-full" style={{background:r.color}}/>
+                <div className="flex-1 min-w-0">
+                  <div className="text-white text-sm font-medium truncate">{r.company} · {r.title}</div>
+                  <div className="text-gray-500 text-xs">{r.comp} · {r.loc}</div>
+                </div>
+                <Pill color={parseInt(r.fit)>=85?"#10b981":parseInt(r.fit)>=60?"#f59e0b":"#ef4444"}>{r.fit} fit</Pill>
+              </Link>
+              <StatusDropdown current={r.status} options={ROLE_STATUSES} onChange={(s) => onUpdateRole(r.id, { status: s })} />
+            </div>
           ))}
         </div>
       </div>
@@ -142,7 +189,7 @@ const Overview = ({roles,tasks}) => {
                 <div className="text-gray-500 text-xs">{p.desc}</div>
               </div>
               {p.roles && p.roles.length > 1 && <Pill color="#10b981">{p.roles.length}x return</Pill>}
-              <Pill color={STATUS_COLORS[p.status]}>{STATUS_LABELS[p.status]}</Pill>
+              <StatusDropdown current={p.status} options={TASK_STATUSES} onChange={(s) => onUpdateTask(p.id, { status: s })} />
             </div>
           ))}
         </div>
@@ -160,7 +207,7 @@ const Overview = ({roles,tasks}) => {
               </div>
               {l.roles && l.roles.length > 1 && <Pill color="#10b981">{l.roles.length}x return</Pill>}
               {l.hours && <span className="text-gray-500 text-xs font-mono">{l.hours}h</span>}
-              <Pill color={STATUS_COLORS[l.status]}>{STATUS_LABELS[l.status]}</Pill>
+              <StatusDropdown current={l.status} options={TASK_STATUSES} onChange={(s) => onUpdateTask(l.id, { status: s })} />
             </div>
           ))}
         </div>
@@ -169,29 +216,31 @@ const Overview = ({roles,tasks}) => {
   );
 };
 
-const RolesView = ({roles}) => (
+const RolesView = ({roles, onUpdateRole}) => (
   <div className="space-y-2">
-    <div className="text-xs tracking-widest text-amber-400 font-mono mb-3">ALL ROLES — CLICK TO MANAGE</div>
-    {[...roles].sort((a,b)=>a.priority-b.priority).map(r=>(
-      <Link key={r.id} to={`/role/${r.id}`} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/[0.08] hover:border-amber-500/20 transition-all cursor-pointer" style={{textDecoration:"none"}}>
-        <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
-        <div className="w-2.5 h-2.5 rounded-full" style={{background:r.color}}/>
-        <div className="flex-1 min-w-0">
-          <div className="text-white text-sm font-medium">{r.company} · {r.title}</div>
-          <div className="text-gray-500 text-xs mt-0.5">{r.comp} · {r.loc}</div>
-        </div>
-        <div className="flex items-center gap-2">
+    <div className="text-xs tracking-widest text-amber-400 font-mono mb-3">ALL ROLES — RANKED BY FIT</div>
+    {[...roles].sort((a,b)=>parseInt(b.fit)-parseInt(a.fit)).map(r=>(
+      <div key={r.id} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/[0.08] hover:border-amber-500/20 transition-all">
+        <Link to={`/role/${r.id}`} className="flex items-center gap-3 flex-1 min-w-0 no-underline" style={{textDecoration:"none"}}>
+          <span className="text-gray-600 font-mono text-xs w-6">#{r.priority}</span>
+          <div className="w-2.5 h-2.5 rounded-full" style={{background:r.color}}/>
+          <div className="flex-1 min-w-0">
+            <div className="text-white text-sm font-medium">{r.company} · {r.title}</div>
+            <div className="text-gray-500 text-xs mt-0.5">{r.comp} · {r.loc}</div>
+          </div>
           <Pill color={parseInt(r.fit)>=85?"#10b981":parseInt(r.fit)>=60?"#f59e0b":"#ef4444"}>{r.fit} fit</Pill>
-          <Pill color={STATUS_COLORS[r.status]||"#4b5563"}>{STATUS_LABELS[r.status]}</Pill>
-          <span className="text-gray-600 text-sm">→</span>
+        </Link>
+        <div className="flex items-center gap-2">
+          <StatusDropdown current={r.status} options={ROLE_STATUSES} onChange={(s) => onUpdateRole(r.id, { status: s })} />
+          <Link to={`/role/${r.id}`} className="text-gray-600 text-sm no-underline" style={{textDecoration:"none"}}>→</Link>
         </div>
-      </Link>
+      </div>
     ))}
   </div>
 );
 
 const CompareView = ({roles}) => {
-  const top = roles.filter(r=>r.priority<=4).sort((a,b)=>a.priority-b.priority);
+  const top = [...roles].sort((a,b)=>parseInt(b.fit)-parseInt(a.fit)).slice(0,4);
   const fields = [
     {label:"Company",fn:r=>r.company},
     {label:"Role",fn:r=>r.title},
@@ -369,7 +418,7 @@ const ProjectsView = ({tasks,roles,onUpdateTask}) => {
                 <div className="flex items-center gap-2">
                   {p.roles && p.roles.length > 1 && <Pill color="#10b981">{p.roles.length}x return</Pill>}
                   <Pill color={p.priority==="high"?"#ef4444":"#f59e0b"}>{p.priority}</Pill>
-                  <Pill color={STATUS_COLORS[p.status]}>{STATUS_LABELS[p.status]}</Pill>
+                  <StatusDropdown current={p.status} options={TASK_STATUSES} onChange={(s) => { onUpdateTask(p.id, { status: s }); }} />
                 </div>
               </div>
               <div className="text-gray-500 text-xs mb-2 ml-11">{p.desc}</div>
@@ -433,7 +482,7 @@ const LearningView = ({tasks,roles,onUpdateTask}) => {
                 <div className="flex items-center gap-2">
                   {l.roles && l.roles.length > 1 && <Pill color="#10b981">{l.roles.length}x return</Pill>}
                   {l.hours && <span className="text-gray-500 text-xs font-mono">{l.hours}h</span>}
-                  <Pill color={STATUS_COLORS[l.status]}>{STATUS_LABELS[l.status]}</Pill>
+                  <StatusDropdown current={l.status} options={TASK_STATUSES} onChange={(s) => onUpdateTask(l.id, { status: s })} />
                 </div>
               </div>
               <div className="text-gray-500 text-xs mb-2 ml-11">{l.desc}</div>
@@ -452,7 +501,7 @@ const LearningView = ({tasks,roles,onUpdateTask}) => {
 // MAIN DASHBOARD
 // ═══════════════════════════════════════════════════════════════
 
-export default function Dashboard({ roles, tasks, onUpdateTask }) {
+export default function Dashboard({ roles, tasks, onUpdateTask, onUpdateRole }) {
   const [tab, setTab] = useState("overview");
 
   const projects = tasks.filter(t=>t.type==="project");
@@ -495,8 +544,8 @@ export default function Dashboard({ roles, tasks, onUpdateTask }) {
       {/* Content */}
       <div className="px-6 py-6">
         <div className="max-w-5xl mx-auto">
-          {tab==="overview" && <Overview roles={roles} tasks={tasks}/>}
-          {tab==="roles" && <RolesView roles={roles}/>}
+          {tab==="overview" && <Overview roles={roles} tasks={tasks} onUpdateTask={onUpdateTask} onUpdateRole={onUpdateRole}/>}
+          {tab==="roles" && <RolesView roles={roles} onUpdateRole={onUpdateRole}/>}
           {tab==="compare" && <CompareView roles={roles}/>}
           {tab==="projects" && <ProjectsView tasks={tasks} roles={roles} onUpdateTask={onUpdateTask}/>}
           {tab==="learning" && <LearningView tasks={tasks} roles={roles} onUpdateTask={onUpdateTask}/>}

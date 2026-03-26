@@ -1,5 +1,28 @@
 import { useState } from "react";
 
+export const tasks = [
+  { title: "Claude Code Skill (published)", type: "project", roles: ["anthropic-claude-code-pm", "anthropic-ui-engineer"], status: "not-started", desc: "Build and publish a useful skill to GitHub", priority: "high" },
+  { title: "MCP Server", type: "project", roles: ["anthropic-claude-code-pm", "anthropic-ui-engineer", "anthropic-consumer-pm"], status: "not-started", desc: "MCP server connecting Claude to useful data source", priority: "high" },
+  { title: "Ecosystem Growth Strategy", type: "project", roles: ["anthropic-claude-code-pm", "anthropic-consumer-pm"], status: "not-started", desc: "How to grow Claude Code skills from 1,234 to 10,000", priority: "medium" },
+  { title: "Claude Code Deep Dive", type: "learning", roles: ["anthropic-claude-code-pm", "anthropic-ui-engineer"], status: "not-started", desc: "Full docs, skills repo, plugin architecture, MCP protocol", priority: "high", hours: 6 },
+];
+
+export const meta = {
+  id: "anthropic-claude-code-pm",
+  company: "Anthropic",
+  title: "PM, Claude Code",
+  comp: "$285K–$305K",
+  fit: "88%",
+  priority: 2,
+  status: "prep",
+  loc: "SF / Seattle",
+  tags: ["PM","Dev Tools","Ecosystem","Technical"],
+  color: "#f59e0b",
+  strengths: ["Power user of Claude Code","5+ yrs PM + eng combined","Hacker spirit","Built skills & MCP workflows","Understands ecosystem deeply"],
+  gaps: [{g:"No formal PM title",s:"MEDIUM"},{g:"Dev tools PM experience",s:"MEDIUM"},{g:"Distribution track record",s:"MEDIUM"},{g:"SF/Seattle location",s:"VARIES"}],
+  verdict: "You use this product daily. Strong technical fit. Lower comp than Consumer PM.",
+};
+
 const S = [
   { id:"opp", title:"The Opportunity", icon:"◆", type:"opp", data:{
     role:"Product Manager, Claude Code", comp:"$285K–$305K + equity", team:"Claude Code (under Cat Wu, Head of Product for Claude Code)", loc:"San Francisco, CA | Seattle, WA",

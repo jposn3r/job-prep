@@ -266,10 +266,15 @@ function BriefTab({ BriefComponent }) {
 }
 
 // ─── Role Detail Page ─────────────────────────────────────────
-export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, onUpdateTask, briefComponents }) {
+const ROLE_STATUSES = ["prep","research","watching","applied","interviewing"];
+const ROLE_STATUS_COLORS = { prep: "#10b981", research: "#f59e0b", watching: "#6b7280", applied: "#3b82f6", interviewing: "#8b5cf6" };
+const ROLE_STATUS_LABELS = { prep: "Prepping", research: "Researching", watching: "Watching", applied: "Applied", interviewing: "Interviewing" };
+
+export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, onUpdateTask, onUpdateRole, briefComponents }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [subTab, setSubTab] = useState("activity");
+  const [statusOpen, setStatusOpen] = useState(false);
   const role = roles.find(r => r.id === id);
 
   if (!role) {
@@ -293,14 +298,15 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
   ];
 
   const fitColor = parseInt(role.fit) >= 85 ? "#10b981" : parseInt(role.fit) >= 60 ? "#f59e0b" : "#ef4444";
-  const statusColors = { prep: "#10b981", research: "#f59e0b", watching: "#6b7280", applied: "#3b82f6", interviewing: "#8b5cf6" };
-  const statusLabels = { prep: "Prepping", research: "Researching", watching: "Watching", applied: "Applied", interviewing: "Interviewing" };
+
+  const currentStatusColor = ROLE_STATUS_COLORS[role.status] || "#6b7280";
+  const currentStatusLabel = ROLE_STATUS_LABELS[role.status] || role.status;
 
   return (
     <div className="min-h-screen text-white" style={{ background: "linear-gradient(160deg,#070707 0%,#0d0d0d 50%,#080808 100%)", fontFamily: "'DM Sans',sans-serif" }}>
-      {/* Header */}
-      <div className="border-b border-white/8 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center gap-4">
+      {/* Sticky Header */}
+      <div style={{ position: "sticky", top: 52, zIndex: 40, background: "rgba(7,7,7,0.92)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="max-w-6xl mx-auto px-6 flex items-center gap-4" style={{ height: 48 }}>
           <button onClick={() => navigate("/")} className="text-gray-500 hover:text-white transition-colors text-sm font-mono flex items-center gap-2">
             <span>←</span> Dashboard
           </button>
@@ -309,7 +315,31 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: role.color }} />
             <span className="text-white font-medium">{role.company} · {role.title}</span>
           </div>
-          <span className="text-gray-600 font-mono text-xs ml-auto">#{role.priority}</span>
+          <div style={{ position: "relative", marginLeft: "auto" }}>
+            <button
+              onClick={() => setStatusOpen(s => !s)}
+              className="text-xs px-3 py-1.5 rounded-full font-mono border flex items-center gap-1.5 transition-colors hover:brightness-125"
+              style={{ background: `${currentStatusColor}15`, color: currentStatusColor, borderColor: `${currentStatusColor}30` }}
+            >
+              {currentStatusLabel}
+              <span style={{ fontSize: 8, marginLeft: 2 }}>▼</span>
+            </button>
+            {statusOpen && (
+              <div style={{ position: "absolute", top: "100%", right: 0, marginTop: 4, zIndex: 60, background: "#1a1a1a", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 8, overflow: "hidden", boxShadow: "0 8px 24px rgba(0,0,0,0.5)" }}>
+                {ROLE_STATUSES.map(s => (
+                  <button
+                    key={s}
+                    onClick={() => { onUpdateRole(id, { status: s }); setStatusOpen(false); }}
+                    className="w-full text-left px-4 py-2 text-xs font-mono flex items-center gap-2 hover:bg-white/10 transition-colors"
+                    style={{ color: role.status === s ? ROLE_STATUS_COLORS[s] : "#9ca3af", minWidth: 140 }}
+                  >
+                    <span style={{ width: 6, height: 6, borderRadius: 3, background: ROLE_STATUS_COLORS[s] }} />
+                    {ROLE_STATUS_LABELS[s]}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -329,10 +359,7 @@ export default function RoleDetail({ roles, tasks, notes, onAddNote, onAddTask, 
               </div>
               <div>
                 <div className="text-xs text-gray-500 font-mono mb-1">FIT</div>
-                <div className="flex items-center gap-2">
-                  <div className="text-lg font-medium" style={{ color: fitColor }}>{role.fit}</div>
-                  <Pill color={statusColors[role.status] || "#6b7280"}>{statusLabels[role.status] || role.status}</Pill>
-                </div>
+                <div className="text-lg font-medium" style={{ color: fitColor }}>{role.fit}</div>
               </div>
               <div>
                 <div className="text-xs text-gray-500 font-mono mb-1">TAGS</div>
